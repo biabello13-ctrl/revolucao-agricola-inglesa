@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revolução Agrícola - Decisões</title>
+<style>
+body{font-family:Arial;background:#eef5ee;margin:0;display:flex;justify-content:center}
+#app{max-width:430px;width:100%;background:#fff;min-height:100vh;padding:16px;box-sizing:border-box}
+h1{color:#2e7d32}.bar{height:10px;background:#ddd;border-radius:9px}.fill{height:10px;border-radius:9px}
+button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:10px;background:#2e7d32;color:#fff;font-size:16px}
+.card{background:#f8f8f8;padding:12px;border-radius:12px;margin:10px 0}
+</style></head><body><div id="app">
+<h1>Revolução Agrícola Inglesa</h1>
+<div id="hud"></div><div id="game"></div></div>
+<script>
+let s={idade:18,d:50,p:50,f:50,r:50,i:0};
+const ev=[
+["Cercamento de terras","Os Enclosure Acts chegam.",[
+["Cercar terras",[15,20,-15,5]],["Manter comum",[0,-5,15,-5]],["Esperar",[5,5,0,0]]
+]],
+["Rotação de Norfolk","Adotar rotação?",[
+["Sim",[-10,20,5,10]],["Parcial",[0,10,0,5]],["Não",[5,-10,0,-5]]
+]],
+["Arado de ferro","Comprar?",[
+["Comprar",[-15,15,5,5]],["Continuar antigo",[0,-5,-5,0]],["Fabricar",[-5,5,0,0]]
+]],
+["Seleção animal","Melhorar rebanho?",[
+["Selecionar",[-20,20,0,10]],["Natural",[0,-5,5,-5]],["Pouco",[-5,5,0,0]]
+]],
+["Fertilizantes","Usar adubo?",[
+["Muito",[-10,15,-5,5]],["Moderado",[-5,8,2,2]],["Não",[0,-10,0,-5]]
+]],
+["Máquinas agrícolas","Investir?",[
+["Sim",[-20,20,-5,10]],["Depois",[0,0,0,0]],["Não",[5,-10,5,-5]]
+]],
+["Êxodo rural","Faltam trabalhadores.",[
+["Aumentar salários",[-10,5,15,5]],["Contratar menos",[5,-10,-10,-5]],["Automatizar",[-15,15,-5,10]]
+]],
+["Consequências sociais","A comunidade reclama.",[
+["Ajudar famílias",[-10,0,15,10]],["Ignorar",[5,0,-15,-10]],["Doar alimentos",[-5,-2,10,10]]
+]],
+["Crescimento da produção","Boa safra!",[
+["Vender tudo",[20,0,0,5]],["Guardar sementes",[5,10,0,5]],["Dividir",[-5,5,10,10]]
+]]
+];
+function clamp(x){return Math.max(0,Math.min(100,x))}
+function hud(){document.getElementById('hud').innerHTML=
+`Idade ${s.idade}<br>💰${s.d} 🌾${s.p} 😊${s.f} ⭐${s.r}`;}
+function show(){
+hud();
+if(s.i>=ev.length){
+let pts=s.d+s.p+s.f+s.r;
+let c=pts>300?"👑 Grande Produtor":pts>240?"🚜 Agricultor Inovador":pts>180?"🌱 Fazendeiro Tradicional":"📉 Fazenda em Crise";
+document.getElementById('game').innerHTML=`<div class=card><h2>Fim!</h2><p>${c}</p><p>Pontuação ${pts}</p><button onclick='location.reload()'>Jogar novamente</button></div>`;return;}
+let e=ev[s.i];
+let h=`<div class=card><h2>${e[0]}</h2><p>${e[1]}</p>`;
+e[2].forEach((o,n)=>h+=`<button onclick='ch(${n})'>${o[0]}</button>`);
+h+="</div>";
+document.getElementById('game').innerHTML=h;
+}
+function ch(n){
+let ef=ev[s.i][2][n][1];
+s.d=clamp(s.d+ef[0]);s.p=clamp(s.p+ef[1]);s.f=clamp(s.f+ef[2]);s.r=clamp(s.r+ef[3]);
+s.idade++;s.i++;show();
+}
+show();
+</script></body></html>
